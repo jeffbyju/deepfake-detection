@@ -1,0 +1,34 @@
+# Core libraries
+numpy
+pandas
+tqdm
+glob2
+absl-py
+jsonlib-python3
+opencv-python
+
+# MTCNN library
+mtcnn
+tensorflow
+
+# PyTorch and related libraries
+torch
+torchvision
+timm
+
+# Image processing
+Pillow
+face-recognition
+
+# Machine learning
+scikit-learn
+
+# LMDB and compression
+lmdb
+lz4
+
+# TensorboardX for visualization
+tensorboardX
+
+# Flask
+flask

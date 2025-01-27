@@ -1,0 +1,116 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Result - Deepfake Detector</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Deepfake Detector</a>
+</nav>
+<div class="container mt-5">
+    <h3>Prediction Result</h3>
+    <p>Deepfake: {{ 'True' if result.is_deepfake == 1 else 'False' }}</p>
+    <p>Confidence: {{ result.confidence }}</p>
+    <a href="/" class="btn btn-secondary mt-3">Upload Another Video</a>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frame Viewer - Deepfake Detector</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .flex-container {
+            display: flex;
+            justify-content: space-between; /* Adjusts spacing between items */
+            align-items: flex-start; /* Aligns items to the top */
+        }
+        .results, .frame-viewer {
+            flex: 1; /* Allows both sections to grow equally */
+            margin: 10px;
+        }
+        #frameCanvas {
+            border: 1px solid #ddd;
+            width: 50%; /* Adjust width as needed */
+            height: auto;
+            margin: 0 auto; /* Center the canvas */
+        }
+        .slider {
+            width: 50%; /* Match width with canvas for consistency */
+            margin: 10px auto; /* Center the slider */
+        }
+        .results {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Deepfake Detector</a>
+</nav>
+<div class="container mt-5">
+  <div class="flex-container">
+      <div class="results">
+          <h3>Prediction Result</h3>
+          <p>Deepfake: {{ 'True' if result.is_deepfake == 1 else 'False' }}</p>
+          <p>Confidence: {{ result.confidence }}</p>
+          <a href="/" class="btn btn-secondary mt-3">Upload Another Video</a>
+      </div>
+
+      <div class="frame-viewer">
+          <h3>Video Frames</h3>
+          <canvas id="frameCanvas"></canvas>
+          <input type="range" min="0" max="{{ num_frames - 1 }}" value="0" class="slider" id="frameSlider">
+      </div>
+  </div>
+</div>
+
+<script>
+// JavaScript to handle frame rendering and slider interaction
+document.addEventListener('DOMContentLoaded', function() {
+    const frameCanvas = document.getElementById('frameCanvas');
+    const frameSlider = document.getElementById('frameSlider');
+    const ctx = frameCanvas.getContext('2d');
+
+    // List of frame URLs passed from Flask
+    const frames = {{ frames | safe }};
+    
+    // Load the first frame
+    loadFrame(0);
+
+    // Handle slider change
+    frameSlider.addEventListener('input', function() {
+        loadFrame(this.value);
+    });
+
+    function loadFrame(index) {
+        const img = new Image();
+        img.onload = function() {
+            ctx.clearRect(0, 0, frameCanvas.width, frameCanvas.height);
+            ctx.drawImage(img, 0, 0, frameCanvas.width, frameCanvas.height);
+        };
+        img.src = frames[index];
+        img.onload = function() {
+            frameCanvas.width = img.width;
+            frameCanvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+        };
+    }
+});
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
